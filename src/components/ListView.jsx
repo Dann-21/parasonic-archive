@@ -27,9 +27,9 @@ const labelOffsets = {
   Water: { dx: -70, dy: 60 },
   Wind: { dx: 70, dy: -55 },
   Electricity: { dx: 70, dy: 60 },
-  Metal: { dx: 0, dy: 105 },
+  Metal: { dx: 0, dy: 170 },
   Biological: { dx: 0, dy: -95 },
-  Heat: { dx: 55, dy: -45 },
+  Heat: { dx: -70, dy: 15 },
 }
 
 const entityElements = {
@@ -46,7 +46,7 @@ const entityElements = {
   'Balcony railing': ['Metal'],
   'Bus': ['Electricity', 'Metal'],
   'Hand rails': ['Metal'],
-  'Electrical cables': ['Electricity', 'Metal'],
+  'Electrical cables': ['Electricity'],
   'Traffic': ['Metal', 'Biological', 'Heat'],
   'Traffic light': ['Electricity', 'Metal'],
   'Voices': ['Biological'],
@@ -110,7 +110,7 @@ Object.keys(elementAnchors).forEach((elName, elIndex) => {
   members.forEach((e, i) => {
     const baseAngle = elIndex * 0.9
     const angle = baseAngle + (i / Math.max(members.length, 1)) * Math.PI * 2
-    const dist = 45 + (i % 2) * 25
+    const dist = members.length === 1 ? 18 : 45 + (i % 2) * 25
     singleElementOffsets[e] = { dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist }
   })
 })
