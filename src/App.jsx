@@ -10,16 +10,15 @@ function App() {
   return (
     <BrowserRouter>
       <nav>
-        <NavLink to="/">Map</NavLink>
-        <NavLink to="/list">List</NavLink>
-        <NavLink to="/about">About</NavLink>
-      </nav>
-      <Routes>
-        <Route path="/" element={<MapView />} />
-        <Route path="/list" element={<ListView />} />
-        <Route path="/about" element={<AboutView />} />
-      </Routes>
-    </BrowserRouter>
+  <NavLink to="/">List</NavLink>
+  <NavLink to="/map">Map</NavLink>
+  <NavLink to="/about">About</NavLink>
+</nav>
+<Routes>
+  <Route path="/" element={<ListView />} />
+  <Route path="/map" element={<MapView />} />
+  <Route path="/about" element={<AboutView />} />
+</Routes>
   )
 }
 

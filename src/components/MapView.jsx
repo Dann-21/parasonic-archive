@@ -5,22 +5,21 @@ import { recordings } from '../data/recordings'
 import { catColors, elementColorMap, elementsForRecording, ElementTags, Waveform } from './ListView'
 import './MapView.css'
 
-const locationCoords = {
-  'Berlin, Neukölln': [52.4809, 13.4294],
-  'Berlin, Hermannplatz': [52.4867, 13.4247],
-  'Berlin, Friedrichshain': [52.5158, 13.4536],
-  'Berlin, Karlshorst': [52.4783, 13.5297],
-  'Berlin, Landsberger Allee': [52.5316, 13.4593],
-  'Berlin, Funkhaus': [52.4636, 13.4954],
-  'Berlin, Warschauer': [52.5058, 13.4494],
-  'Milano, Bolívar': [45.4642, 9.1900],
+const cityCoords = {
+  'Berlin': [52.52, 13.405],
+  'Milano': [45.4642, 9.19],
   'Lecco': [45.8566, 9.3931],
-  'Sanremo': [43.8185, 7.7790],
-  'Chamonix, Les Houches': [45.8909, 6.7997],
+  'Sanremo': [43.8185, 7.779],
+  'Chamonix': [45.8909, 6.8693],
+  'Leipzig': [51.3397, 12.3731],
+  'Calco': [45.735, 9.400],
 }
 
-const locationSafeBearings = {
-  Sanremo: [0, 25, -25, 340, 15],
+// coastal/lakeside towns get restricted bearings so jittered points don't
+// land in the water — approximate, adjust if any still look wrong
+const citySafeBearings = {
+  Sanremo: [0, 20, -20, 340, 40, -40],
+  Lecco: [80, 110, 140, -140, -110],
 }
 
 function hashString(str) {
@@ -37,14 +36,15 @@ function coordSeedFor(recording) {
 }
 
 function jitteredCoords(recording) {
-  const base = locationCoords[recording.location]
+  const cityName = recording.location.split(',')[0].trim()
+  const base = cityCoords[cityName]
   if (!base) return null
   const seed = coordSeedFor(recording)
   const h = Math.abs(hashString(seed))
-  const bearings = locationSafeBearings[recording.location]
+  const bearings = citySafeBearings[cityName]
   const bearingDeg = bearings ? bearings[h % bearings.length] : h % 360
   const angle = bearingDeg * (Math.PI / 180)
-  const dist = 0.006 + ((h % 100) / 100) * 0.01
+  const dist = 0.02 + ((h % 100) / 100) * 0.05
   return [base[0] + Math.cos(angle) * dist, base[1] + Math.sin(angle) * dist]
 }
 

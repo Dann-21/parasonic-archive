@@ -35,7 +35,7 @@ const labelOffsets = {
 const entityElements = {
   'Pavement': ['Ground'],
   'Ground': ['Ground'],
-  'Compost': ['Ground'],
+  'Compost': ['Ground', 'Biological'],
   'Worms': ['Ground', 'Biological'],
   'Rain': ['Water'],
   'Drain pipe': ['Water', 'Metal'],
@@ -48,8 +48,55 @@ const entityElements = {
   'Hand rails': ['Metal'],
   'Electrical cables': ['Electricity', 'Metal'],
   'Traffic': ['Metal', 'Biological', 'Heat'],
-  'Traffic light': ['Electricity'],
+  'Traffic light': ['Electricity', 'Metal'],
   'Voices': ['Biological'],
+  'Synthesiser': ['Electricity', 'Metal'],
+  'Charger': ['Electricity'],
+  'Computer': ['Metal', 'Electricity'],
+  'Lift': ['Metal', 'Electricity'],
+  'Circuit breaker': ['Electricity'],
+  'Microwave': ['Metal', 'Electricity'],
+  'Mobile phone': ['Metal', 'Electricity'],
+  'Train': ['Metal', 'Electricity'],
+  'Speakers': ['Metal', 'Electricity'],
+  'Supermarket': ['Metal', 'Electricity'],
+  'Washing machine': ['Metal', 'Electricity'],
+  'Metro': ['Metal', 'Electricity'],
+  'Metro station': ['Electricity', 'Metal'],
+  'Shop': ['Metal', 'Electricity'],
+  'Kitchen': ['Metal', 'Electricity'],
+  'Living room': ['Biological', 'Electricity'],
+  'Train station': ['Metal', 'Electricity'],
+  'Cow': ['Biological', 'Ground'],
+  'Electrified fence': ['Metal', 'Electricity'],
+  'River': ['Water'],
+  'Tree': ['Biological'],
+  'Mountain': ['Ground', 'Wind'],
+  'Mycelium': ['Biological', 'Ground'],
+  'Ambulance': ['Metal', 'Heat', 'Biological'],
+  'Trash bin': ['Metal'],
+  'Boat': ['Metal', 'Water'],
+  'Bridge': ['Metal'],
+  'Carriage rails': ['Metal'],
+  'Roof': ['Metal'],
+  'Container': ['Metal'],
+  'Gate': ['Metal'],
+  'Crowd': ['Biological'],
+  'Guardrail': ['Metal'],
+  'Lamp': ['Metal', 'Electricity'],
+  'Architectonic structure': ['Metal'],
+  'Street sign': ['Metal'],
+  'Tram': ['Metal', 'Electricity'],
+  'Fireworks': ['Heat'],
+  'Harbour': ['Metal', 'Water', 'Heat'],
+  'Post box': ['Metal'],
+  'Car': ['Metal', 'Electricity', 'Heat'],
+  'Stairs': ['Metal'],
+  'Waterfall': ['Water'],
+  'Rocks': ['Ground'],
+  'Rod': ['Metal'],
+  'Chain': ['Metal'],
+  'Flag pole': ['Metal'],
 }
 
 const allEntities = [...new Set(recordings.flatMap((r) => r.entities))]
@@ -223,7 +270,10 @@ export function Waveform({ recording, isPlaying, onPlayingChange }) {
       url: recording.audioFile,
     })
     wsRef.current = ws
-    ws.on('ready', () => setRevealed(true))
+    ws.on('ready', () => {
+      setRevealed(true)
+      if (isPlaying) ws.play()
+    })
     ws.on('play', () => onPlayingChange(true))
     ws.on('pause', () => onPlayingChange(false))
     ws.on('finish', () => onPlayingChange(false))
