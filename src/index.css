@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0e1210;
+  min-height: 100vh;
+  width: 100%;
+}
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+nav {
+  display: flex;
+  gap: 20px;
+  padding: 16px 24px;
+  font-family: 'Courier New', monospace;
+}
+nav a {
+  color: #7c8a80;
+  text-decoration: none;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+nav a:hover {
+  color: #e4402a;
+}
