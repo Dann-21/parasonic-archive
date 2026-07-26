@@ -200,7 +200,7 @@ export function ElementTags({ elements }) {
   )
 }
 
-function Waveform({ recording, isPlaying, onPlayingChange }) {
+export function Waveform({ recording, isPlaying, onPlayingChange }) {
   const containerRef = useRef(null)
   const wsRef = useRef(null)
   const [activated, setActivated] = useState(false)
