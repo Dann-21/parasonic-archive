@@ -2,9 +2,7 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import ListView from './components/ListView'
 import MapView from './components/MapView'
 
-function AboutView() {
-  return <h2>About</h2>
-}
+import AboutView from './components/AboutView'
 
 function App() {
   return (

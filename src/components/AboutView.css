@@ -1,0 +1,48 @@
+.about-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+.about-page h1 {
+  font-size: 28px;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.about-subtitle {
+  font-style: italic;
+  color: #7c8a80;
+  margin-bottom: 40px;
+  font-size: 12px;
+}
+.about-page section { margin-bottom: 36px; }
+.about-page h2 {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #e4402a;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #2a2f2b;
+  padding-bottom: 8px;
+}
+.about-page h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #2a2f2b;
+  padding-bottom: 8px;
+}
+.about-page p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #e8e4da;
+  margin-bottom: 16px;
+}
+.about-page p2 {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #f10101;
+  margin-bottom: 16px;
+}
+.about-page a { color: #6fa3c9; }
