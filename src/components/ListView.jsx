@@ -508,7 +508,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
       zoneLabels[name] = zoneGroup.append('text')
         .attr('x', lx).attr('y', ly)
         .attr('text-anchor', 'middle')
-        .attr('font-family', "'Courier New', monospace")
+        .attr('font-family', "'M PLUS 1mn', 'Courier New', monospace")
         .attr('font-size', a.tier === 'secondary' ? 14 : 19)
         .attr('font-weight', 'bold')
         .attr('letter-spacing', '3px')
@@ -571,7 +571,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
 
     const labelSel = g.append('g').selectAll('text').data(nodes).join('text')
       .text((d) => d.id)
-      .attr('font-family', "'Courier New', monospace")
+      .attr('font-family', "'M PLUS 1mn', 'Courier New', monospace")
       .attr('font-size', 15)
       .attr('fill', '#e8e4da')
       .attr('x', (d) => d.x).attr('y', (d) => d.y)
