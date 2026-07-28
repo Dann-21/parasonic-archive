@@ -22,6 +22,7 @@ export default function AboutView() {
             Offered under an open license, the archive is intended as a contribution to sound studies, acoustic ecology, 
             and phenomenological approaches, proposing that conducted and inaudible sound
             reveal environments to be more materially intertwined than ordinary perception suggests.
+            This is archive for all the voices that remain unheard, intangible and unlistened.
         </p2>
       </section>
 
@@ -33,19 +34,23 @@ export default function AboutView() {
         </p>
         <p> 
           The term parasonic is used to name something more specific than an inaudible frequency range.
-          Certain phenomena are inaudible simply because their frequency lies beyond the ear's cochlear limits; 
-          others, however, remain locally unavailable even while propagating within the planes we inhabit — 
-          too small, too distributed, or not resonant enough to surface as a distinct sound-object. 
-          Parasonic becomes a mode of sonic withdrawal rather than an absence. 
-          Following Mark Fisher's account of the eerie as a presence where nothing appears to be, 
-          and Deleuze and Guattari's figure of a body without organs — 
+          Not everything beyond our audible sphere is hidden in the same way. 
+          Some phenomena lie outside human hearing because their frequencies are too low or too high. 
+          Others, however, are materially active within the same bands we inhabit, yet remain locally 
+          unreachable to unaided listening. The term parasonic is adopted here to describe 
+          the spatial dimension on which inaudible frequencies are conducted, as an explanation for
+          a microscopic world of action, sitting on the edges of our listening. 
+          Parasonic are inaudible agents that have sonic qualities: 
+          sound-making bodies with their propagation just outside, with and into (para-) 
+          our sonic experience of our surroundings. Absent presences. 
+          A voice where there seems to be nothing, silent to their own becoming-loudness 
+          on other planes of agency. 
+          Deleuze and Guattari's figure of a body without organs — 
           a surface of intensities prior to any organized, perceivable form — 
           the parasonic can be understood as naming bodies and surfaces that are sonically active 
           without yet being legible. A coming together of outer and inner soundscapes. 
-          As Don Ihde and Peter-Paul Verbeek have each argued, 
-          such withdrawn activity becomes available only through technological mediation: 
-          amplification, pitch transposition, direct contact, each reconfiguring the relation between listener, 
-          instrument, and environment. A hidden node of participation in an already-sonorous field. 
+          A hidden node of post-human participation in an already-sonorous field,  
+          available only through technological mediation. 
           The parasonic, in this sense, names a methodological hinge: 
           between what is materially active and what is perceptually available, between the world as it vibrates 
           and the world as it is heard; between the audible and listened to.
@@ -58,8 +63,8 @@ export default function AboutView() {
           If the parasonic marks a gap between material activity and perceptual availability, 
           the will to archive marks a related gap between an event's occurrence and its persistence. 
           Carlo Rovelli, in The Order of Time, argues that memory is itself a physical trace: 
-          a correlation left behind by an improbable past, legible to whatever is capable of reading it. 
-          To record a parasonic event is to fix, deliberately, one such trace against the otherwise 
+          a correlation left behind by an improbable past, semiotically charged to whatever is capable of reading it. 
+          To record a parasonic event is to fix one such trace against the otherwise 
           indifferent tendency of things to blur, disperse, and become uncorrelated with what came before. 
           The recordings gathered here can't claim to preserve an event unchanged; no trace ever does. 
           They only strive to hold open, a little longer than it would otherwise remain open, 
@@ -70,7 +75,8 @@ export default function AboutView() {
       <section>
         <h2>Instruments and affordances</h2>
         <p>
-          Four methods of listening make up the archive. EMF pickup microphones (with the same coil sensitivity)
+          Four methods of listening make up the archive. 
+          EMF pickup microphones (with the same coil sensitivity)
           capture the electromagnetic field given off by anything carrying current — 
           traffic lights, appliances, trains, computers — 
           rendering audible a layer of activity that wouldn't have an ordinary acoustic presence. 
@@ -81,7 +87,7 @@ export default function AboutView() {
           the same event — rain, footsteps, traffic, wind —
           sounds entirely different depending on the material carrying it to the microphone. Some of these
           geophone recordings are paired with a second, infrasonic version: the same take, transposed up
-          two octaves and filtered to isolate the register that sits below ordinary hearing. 
+          two octaves and filtered to isolate the register that sits under 20Hz. 
           These frequencies are usually felt, in the chest or through the floor, rather than heard outright. 
           Lastly, microphones with ultrasonic capabilities, soldered around Primo EM258 capsules, 
           extend listening in the opposite direction, into frequencies above the audible range.
