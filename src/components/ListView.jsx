@@ -385,6 +385,10 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     const width = graphRef.current.clientWidth || 960
     const height = graphRef.current.clientHeight || 700
     dimsRef.current = { width, height }
+    const isMobile = width < 500
+    const nodeR = isMobile ? 10 : 7
+    const haloR = isMobile ? 20 : 14
+    const labelFontSize = isMobile ? 17 : 15
 
     const nodes = allEntities.map((e) => {
       const a = anchorForStatic(e)
@@ -569,20 +573,20 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
       .attr('x2', (d) => d.target.x).attr('y2', (d) => d.target.y)
 
     const haloSel = g.append('g').selectAll('circle').data(nodes).join('circle')
-      .attr('r', 14).attr('fill', (d) => d.fillRef).attr('opacity', 0.22)
+      .attr('r', haloR).attr('fill', (d) => d.fillRef).attr('opacity', 0.22)
       .attr('filter', 'url(#halo-blur)')
       .attr('cx', (d) => d.x).attr('cy', (d) => d.y)
       .style('pointer-events', 'none')
 
     const nodeSel = g.append('g').selectAll('circle').data(nodes).join('circle')
-      .attr('r', 7).attr('fill', '#0e1210').attr('stroke', (d) => d.fillRef).attr('stroke-width', 1.5)
+      .attr('r', nodeR).attr('fill', '#0e1210').attr('stroke', (d) => d.fillRef).attr('stroke-width', 1.5)
       .attr('cx', (d) => d.x).attr('cy', (d) => d.y)
       .style('cursor', 'pointer')
 
     const labelSel = g.append('g').selectAll('text').data(nodes).join('text')
       .text((d) => d.id)
       .attr('font-family', "'M PLUS 1mn', 'Courier New', monospace")
-      .attr('font-size', 15)
+      .attr('font-size', labelFontSize)
       .attr('fill', '#e8e4da')
       .attr('x', (d) => d.x).attr('y', (d) => d.y)
       .attr('dx', 11).attr('dy', 4)
@@ -777,7 +781,8 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     <div className="relations-layout">
       <div className="graph-wrap" ref={graphRef}></div>
       {(selectedPath.length > 0 || activeElement) && (
-        <div className="relations-sidebar">
+          <div className="relations-sidebar">
+          <button className="sidebar-close" onClick={() => { setSelectedPath([]); setActiveElement(null) }}>✕ Back to graph</button>
           <audio ref={audioRef} onEnded={() => setPlayingId(null)} />
           <div className="sidebar-title">{matchedRecordings.length} recording{matchedRecordings.length === 1 ? '' : 's'}</div>
           {matchedRecordings.length === 0 && (

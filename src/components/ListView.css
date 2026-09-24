@@ -152,3 +152,41 @@
   from { transform: translateX(-4%); }
   to { transform: translateX(4%); }
 }
+
+.relations-layout {
+  height: 100dvh;
+}
+
+@media (max-width: 640px) {
+  .relations-layout {
+    flex-direction: column;
+  }
+  .relations-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 55vh;
+    max-height: 55vh;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+  }
+}
+
+.sidebar-close {
+  display: block;
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  background: none;
+  border: 1px solid #2a2f2b;
+  color: #e8e4da;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1;
+}
+.sidebar-close:hover { border-color: #e4402a; color: #e4402a; }
