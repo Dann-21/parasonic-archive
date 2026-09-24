@@ -318,6 +318,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
   const audioRef = useRef(null)
   const [playingId, setPlayingId] = useState(null)
   const [activeElement, setActiveElement] = useState(null)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => { selectedPathRef.current = selectedPath }, [selectedPath])
 
@@ -358,6 +359,14 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
       audio.play().catch(() => {})
     }
     setPlayingId(top.id)
+  }, [selectedPath, activeElement])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    const update = () => setProgress(audio.duration ? audio.currentTime / audio.duration : 0)
+    audio.addEventListener('timeupdate', update)
+    return () => audio.removeEventListener('timeupdate', update)
   }, [selectedPath, activeElement])
 
   function toggleEntity(e) {
@@ -776,12 +785,14 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     : selectedPath.length > 0
     ? recordings.filter((r) => matchesGeneric(r, selectedPath, ''))
     : []
+  const currentTrack = recordings.find((r) => r.id === playingId)
 
   return (
     <div className="relations-layout">
       <div className="graph-wrap" ref={graphRef}></div>
       {(selectedPath.length > 0 || activeElement) && (
-          <div className="relations-sidebar">
+        <>
+        <div className="relations-sidebar">
           <button className="sidebar-close" onClick={() => { setSelectedPath([]); setActiveElement(null) }}>✕ Back to graph</button>
           <audio ref={audioRef} onEnded={() => setPlayingId(null)} />
           <div className="sidebar-title">{matchedRecordings.length} recording{matchedRecordings.length === 1 ? '' : 's'}</div>
@@ -806,8 +817,21 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
         </div>
       )}
     </div>
-  )
-}
+        {currentTrack && (
+          <div className="mini-player">
+            <div className="mini-player-progress"><div className="mini-player-progress-fill" style={{ width: `${progress * 100}%` }}></div></div>
+            <div className="mini-player-info">
+              <div className="mini-player-title">{currentTrack.title}</div>
+              <div className="mini-player-meta">{currentTrack.frequencyCategory}</div>
+            </div>
+            <button className="mini-player-playbtn" onClick={() => togglePlay(currentTrack)}>
+              {playingId === currentTrack.id ? '❚❚' : '▶'}
+            </button>
+            <button className="mini-player-close" onClick={() => { setSelectedPath([]); setActiveElement(null) }}>✕</button>
+          </div>
+        )}
+        </>
+      )}
 
 function MomentsList({ selectedPath, setSelectedPath, searchQuery, setSearchQuery, flashId, setFlashId }) {
   const [playingId, setPlayingId] = useState(null)
