@@ -161,6 +161,15 @@ export function elementsForRecording(r) {
   return [...set]
 }
 
+// derives the compressed streaming version's URL from the original WAV's URL —
+// used for all in-browser playback; the original stays reserved for downloads
+function previewUrlFor(recording) {
+  const parts = recording.audioFile.split('/')
+  const filename = parts.pop()
+  const previewName = filename.replace(/\.wav$/i, '.mp3')
+  return [...parts, 'previews', previewName].join('/')
+}
+
 function computeAnchors(selectedPath, activeElement) {
   if (activeElement) {
     const base = elementAnchors[activeElement]
@@ -267,7 +276,7 @@ export function Waveform({ recording, isPlaying, onPlayingChange }) {
       height: 34,
       barWidth: 2,
       barGap: 1,
-      url: recording.audioFile,
+      url: previewUrlFor(recording),
     })
     wsRef.current = ws
     ws.on('ready', () => {
@@ -319,7 +328,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
       audio.pause()
       setPlayingId(null)
     } else {
-      audio.src = r.audioFile
+      audio.src = previewUrlFor(r)
       audio.play().catch(() => {})
       setPlayingId(r.id)
     }
@@ -341,8 +350,9 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     }
     const top = matches[0]
     const audio = audioRef.current
-    if (audio && audio.src.indexOf(top.audioFile) === -1) {
-      audio.src = top.audioFile
+    const previewUrl = previewUrlFor(top)
+    if (audio && audio.src.indexOf(previewUrl) === -1) {
+      audio.src = previewUrl
       audio.play().catch(() => {})
     } else if (audio) {
       audio.play().catch(() => {})
