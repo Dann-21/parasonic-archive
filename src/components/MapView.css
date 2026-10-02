@@ -115,3 +115,7 @@
 }
 .comic-popup-wrap .leaflet-popup-content { margin: 0; }
 .comic-popup-wrap .leaflet-popup-tip { background: #ffffff; }
+
+@media (max-width: 640px) {
+  .map-sidebar { display: none; }
+}

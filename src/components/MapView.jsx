@@ -81,6 +81,7 @@ export default function MapView() {
   const mapRef = useRef(null)
   const [selectedId, setSelectedId] = useState(null)
   const [playingId, setPlayingId] = useState(null)
+  const [progress, setProgress] = useState(0)
 
   function handlePlayingChange(r, playing) {
     if (playing) setPlayingId(r.id)
@@ -169,7 +170,9 @@ L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Canvas/World
     <div className="map-page">
       <div className="map-canvas" ref={mapContainerRef}></div>
       {selected && (
+        <>
         <div className="map-sidebar">
+          <button className="sidebar-close" onClick={() => setSelectedId(null)}>✕ Close</button>
           <div className="sidebar-title">{selected.location}</div>
           <div className="sidebar-rec">
             <div className="sidebar-rec-top">
@@ -186,11 +189,24 @@ L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/Canvas/World
               recording={selected}
               isPlaying={playingId === selected.id}
               onPlayingChange={(playing) => handlePlayingChange(selected, playing)}
+              onProgressChange={setProgress}
             />
             <div className="sidebar-rec-meta">{selected.date}</div>
             <ElementTags elements={elementsForRecording(selected)} />
           </div>
         </div>
+        <div className="mini-player">
+          <div className="mini-player-progress"><div className="mini-player-progress-fill" style={{ width: `${progress * 100}%` }}></div></div>
+          <div className="mini-player-info">
+            <div className="mini-player-title">{selected.title}</div>
+            <div className="mini-player-meta">{selected.frequencyCategory}</div>
+          </div>
+          <button className="mini-player-playbtn" onClick={() => handlePlayingChange(selected, playingId !== selected.id)}>
+            {playingId === selected.id ? '❚❚' : '▶'}
+          </button>
+          <button className="mini-player-close" onClick={() => setSelectedId(null)}>✕</button>
+        </div>
+        </>
       )}
     </div>
   )

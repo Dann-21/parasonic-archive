@@ -256,7 +256,7 @@ export function ElementTags({ elements }) {
   )
 }
 
-export function Waveform({ recording, isPlaying, onPlayingChange }) {
+export function Waveform({ recording, isPlaying, onPlayingChange, onProgressChange }) {
   const containerRef = useRef(null)
   const wsRef = useRef(null)
   const [activated, setActivated] = useState(false)
@@ -286,6 +286,11 @@ export function Waveform({ recording, isPlaying, onPlayingChange }) {
     ws.on('play', () => onPlayingChange(true))
     ws.on('pause', () => onPlayingChange(false))
     ws.on('finish', () => onPlayingChange(false))
+    if (onProgressChange) {
+      const reportProgress = () => onProgressChange(ws.getDuration() ? ws.getCurrentTime() / ws.getDuration() : 0)
+      ws.on('audioprocess', reportProgress)
+      ws.on('seeking', reportProgress)
+    }
     return () => ws.destroy()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activated])
