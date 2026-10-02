@@ -487,7 +487,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
 
     const haloFilter = defs.append('filter').attr('id', 'halo-blur')
       .attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%')
-    haloFilter.append('feGaussianBlur').attr('stdDeviation', 26)
+      haloFilter.append('feGaussianBlur').attr('stdDeviation', isMobile ? 10 : 26)
 
     const zoneGroup = g.append('g')
     const hitGroup = g.append('g')

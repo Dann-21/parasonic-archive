@@ -158,6 +158,7 @@
 }
 
 @media (max-width: 640px) {
+  .mini-player { display: none; }
   .relations-layout {
     flex-direction: column;
   }
@@ -218,7 +219,6 @@
   }
 }
 
-.mini-player { display: none; }
 
 .sidebar-close {
   display: block;
