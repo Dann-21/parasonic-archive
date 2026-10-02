@@ -157,6 +157,8 @@
   height: 100dvh;
 }
 
+.mini-player { display: none; }
+
 @media (max-width: 640px), (pointer: coarse) {
   .map-sidebar { display: none; }
   .relations-layout {
