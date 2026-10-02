@@ -55,7 +55,7 @@ function Dial({ mode, stations, tunedStation, onTune }) {
   }
   function handlePointerMove(e) {
     if (!draggingRef.current) return
-    const deltaX = e.clientX - dragStartXRef.current
+    const deltaX = (e.clientX - dragStartXRef.current) * 8
     scrollRef.current.scrollLeft = dragStartScrollRef.current - deltaX
     handleScroll()
   }
@@ -121,11 +121,21 @@ function Fader({ value, min, max, onChange }) {
   )
 }
 
+function shuffle(arr) {
+  const copy = [...arr]
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
 export default function RadioView() {
   const [power, setPower] = useState(false)
   const [mode, setMode] = useState('elements')
   const [tunedStation, setTunedStation] = useState(elementNames[0])
   const [volume, setVolume] = useState(0.8)
+    const [shuffledEntities] = useState(() => shuffle(allEntities))
 
   const playerRef = useRef(null)
   const volumeNodeRef = useRef(null)
@@ -197,7 +207,7 @@ export default function RadioView() {
 
   async function toggleMode() {
     const newMode = mode === 'elements' ? 'entities' : 'elements'
-    const newStation = newMode === 'elements' ? elementNames[0] : [...allEntities].sort()[0]
+    const newStation = newMode === 'elements' ? elementNames[0] : shuffledEntities[0]
     setMode(newMode)
     setTunedStation(newStation)
     if (power) {
@@ -221,7 +231,7 @@ export default function RadioView() {
     }
   }, [])
 
-  const stations = mode === 'elements' ? elementNames : [...allEntities].sort()
+    const stations = mode === 'elements' ? elementNames : shuffledEntities
 
   return (
     <div className="radio-page">

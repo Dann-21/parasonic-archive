@@ -166,7 +166,7 @@ function Layer({ index, layer, onAssign, onRemove, onUpdate }) {
         </div>
         <Knob label="DRIVE" value={layer.distortion} min={0} max={1} onChange={(v) => onUpdate(index, 'distortion', v)} displayValue={`${Math.round(layer.distortion * 100)}%`} />
         <Knob label="TRANSPOSE" value={layer.transpose} min={-12} max={12} onChange={(v) => onUpdate(index, 'transpose', v)} displayValue={`${layer.transpose > 0 ? '+' : ''}${layer.transpose.toFixed(0)}st`} />
-        <Knob label="FILTER" value={layer.filter} min={-1} max={1} onChange={(v) => onUpdate(index, 'filter', v)} displayValue={layer.filter > -0.03 && layer.filter < 0.03 ? 'OPEN' : layer.filter < 0 ? 'HP' : 'LP'} />
+        <Knob label="FILTER" value={layer.filter} min={-1} max={1} onChange={(v) => onUpdate(index, 'filter', v)} displayValue={layer.filter > -0.03 && layer.filter < 0.03 ? 'OPEN' : layer.filter > 0 ? 'HP' : 'LP'} />
       </div>
     </div>
   )
@@ -256,12 +256,12 @@ function getOrCreateChain(index) {
     } else if (key === 'distortion') {
       chain.distortion.wet.value = value
     } else if (key === 'filter') {
-      if (value < 0) {
+      if (value > 0) {
         chain.filter.type = 'highpass'
-        chain.filter.frequency.value = 20 + Math.abs(value) * 2000
+        chain.filter.frequency.value = 20 + value * 2000
       } else {
         chain.filter.type = 'lowpass'
-        chain.filter.frequency.value = 20000 - value * 18000
+        chain.filter.frequency.value = 20000 + value * 18000
       }
     } else if (key === 'delayCharacter') {
       const presets = { short: [0.08, 0.2], medium: [0.25, 0.35], long: [0.5, 0.5] }
