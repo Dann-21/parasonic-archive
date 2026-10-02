@@ -119,3 +119,5 @@
 @media (max-width: 640px) {
   .map-sidebar { display: none; }
 }
+
+.mini-player { z-index: 1000; }
