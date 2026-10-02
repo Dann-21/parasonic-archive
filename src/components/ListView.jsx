@@ -163,7 +163,7 @@ export function elementsForRecording(r) {
 
 // derives the compressed streaming version's URL from the original WAV's URL —
 // used for all in-browser playback; the original stays reserved for downloads
-function previewUrlFor(recording) {
+export function previewUrlFor(recording) {
   const parts = recording.audioFile.split('/')
   const filename = parts.pop()
   const previewName = filename.replace(/\.wav$/i, '.mp3')
