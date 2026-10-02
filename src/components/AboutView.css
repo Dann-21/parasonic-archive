@@ -1,7 +1,7 @@
 .about-page {
   max-width: 720px;
   margin: 0 auto;
-  padding-bottom: 80px;
+  padding: 0 20px 80px;
 }
 .about-page h1 {
   font-size: 28px;
