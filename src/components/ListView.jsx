@@ -785,6 +785,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     : selectedPath.length > 0
     ? recordings.filter((r) => matchesGeneric(r, selectedPath, ''))
     : []
+
   const currentTrack = recordings.find((r) => r.id === playingId)
 
   return (
@@ -815,8 +816,6 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
             </div>
           ))}
         </div>
-      )}
-    </div>
         {currentTrack && (
           <div className="mini-player">
             <div className="mini-player-progress"><div className="mini-player-progress-fill" style={{ width: `${progress * 100}%` }}></div></div>
@@ -832,6 +831,9 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
         )}
         </>
       )}
+    </div>
+  )
+}
 
 function MomentsList({ selectedPath, setSelectedPath, searchQuery, setSearchQuery, flashId, setFlashId }) {
   const [playingId, setPlayingId] = useState(null)
