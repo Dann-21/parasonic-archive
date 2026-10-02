@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import * as Tone from 'tone'
 import { recordings } from '../data/recordings'
 import { allEntities, connectedTo, matchesElement, previewUrlFor } from './ListView'
-import { Knob } from './MixerView'
 import './RadioView.css'
 
 const elementNames = ['Ground', 'Water', 'Wind', 'Metal', 'Electricity', 'Biological', 'Heat']
@@ -18,6 +17,9 @@ function recordingsForElementStation(elementName) {
 function Dial({ mode, stations, tunedStation, onTune }) {
   const scrollRef = useRef(null)
   const timeoutRef = useRef(null)
+  const draggingRef = useRef(false)
+  const dragStartXRef = useRef(0)
+  const dragStartScrollRef = useRef(0)
 
   useEffect(() => {
     const container = scrollRef.current
@@ -44,10 +46,35 @@ function Dial({ mode, stations, tunedStation, onTune }) {
     }, 150)
   }
 
+  function handlePointerDown(e) {
+    if (e.pointerType !== 'mouse') return
+    draggingRef.current = true
+    dragStartXRef.current = e.clientX
+    dragStartScrollRef.current = scrollRef.current.scrollLeft
+    scrollRef.current.setPointerCapture(e.pointerId)
+  }
+  function handlePointerMove(e) {
+    if (!draggingRef.current) return
+    const deltaX = e.clientX - dragStartXRef.current
+    scrollRef.current.scrollLeft = dragStartScrollRef.current - deltaX
+    handleScroll()
+  }
+  function handlePointerUp() {
+    draggingRef.current = false
+  }
+
   return (
     <div className="dial-wrap">
       <div className="dial-needle"></div>
-      <div className="dial-scroll" ref={scrollRef} onScroll={handleScroll}>
+      <div
+        className="dial-scroll"
+        ref={scrollRef}
+        onScroll={handleScroll}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+      >
         <div className="dial-pad"></div>
         {stations.map((s) => (
           <div key={s} className={'dial-station' + (s === tunedStation ? ' tuned' : '')} data-station={s}>
@@ -56,6 +83,40 @@ function Dial({ mode, stations, tunedStation, onTune }) {
         ))}
         <div className="dial-pad"></div>
       </div>
+    </div>
+  )
+}
+
+function Fader({ value, min, max, onChange }) {
+  const trackRef = useRef(null)
+  const draggingRef = useRef(false)
+
+  function updateFromClientX(clientX) {
+    const track = trackRef.current
+    if (!track) return
+    const rect = track.getBoundingClientRect()
+    const fraction = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width))
+    onChange(min + fraction * (max - min))
+  }
+
+  function handlePointerDown(e) {
+    draggingRef.current = true
+    e.target.setPointerCapture(e.pointerId)
+    updateFromClientX(e.clientX)
+  }
+  function handlePointerMove(e) {
+    if (!draggingRef.current) return
+    updateFromClientX(e.clientX)
+  }
+  function handlePointerUp() {
+    draggingRef.current = false
+  }
+
+  const fraction = (value - min) / (max - min)
+
+  return (
+    <div className="fader-track" ref={trackRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp}>
+      <div className="fader-cap" style={{ left: `${fraction * 100}%` }}></div>
     </div>
   )
 }
@@ -173,7 +234,7 @@ export default function RadioView() {
         <Dial mode={mode} stations={stations} tunedStation={tunedStation} onTune={tuneTo} />
         <div className="radio-controls">
           <button className={'radio-power' + (power ? ' on' : '')} onClick={togglePower}>⏻</button>
-          <Knob label="VOLUME" value={volume} min={0} max={1} onChange={setVolume} displayValue={`${Math.round(volume * 100)}%`} />
+            <Fader value={volume} min={0} max={1} onChange={setVolume} />
           <button className="radio-switch" onClick={toggleMode}>
             <span className={mode === 'entities' ? 'active' : ''}>AM</span>
             <span className={mode === 'elements' ? 'active' : ''}>FM</span>
