@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import ListView from './components/ListView'
 import MapView from './components/MapView'
-import MixerView from './components/MixerView'
+import MusicView from './components/MusicView'
 import AboutView from './components/AboutView'
 
 function App() {
@@ -10,13 +10,13 @@ function App() {
       <nav>
   <NavLink to="/">List</NavLink>
   <NavLink to="/map">Map</NavLink>
-  <NavLink to="/radio">Radio</NavLink>
+  <NavLink to="/music">Music</NavLink>
   <NavLink to="/about">About</NavLink>
 </nav>
 <Routes>
   <Route path="/" element={<ListView />} />
   <Route path="/map" element={<MapView />} />
-  <Route path="/radio" element={<MixerView />} />
+  <Route path="/music" element={<MusicView />} />
   <Route path="/about" element={<AboutView />} />
 </Routes>
     </BrowserRouter>

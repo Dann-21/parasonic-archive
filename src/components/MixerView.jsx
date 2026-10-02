@@ -54,7 +54,7 @@ function audioBufferToWav(buffer) {
   return encodeWAV(samples, buffer.sampleRate, buffer.numberOfChannels)
 }
 
-function Knob({ label, value, min, max, onChange, displayValue }) {
+export function Knob({ label, value, min, max, onChange, displayValue }) {
   const draggingRef = useRef(false)
   const startYRef = useRef(0)
   const startValueRef = useRef(0)
@@ -152,18 +152,27 @@ function Layer({ index, layer, onAssign, onRemove, onUpdate }) {
         </button>
         <button className="mixer-removebtn" onClick={() => onRemove(index)}>✕</button>
       </div>
-      <div className="mixer-knobs">
+            <div className="mixer-knobs">
         <Knob label="VOLUME" value={layer.volume} min={0} max={1} onChange={(v) => onUpdate(index, 'volume', v)} displayValue={`${Math.round(layer.volume * 100)}%`} />
         <Knob label="REVERB" value={layer.reverb} min={0} max={1} onChange={(v) => onUpdate(index, 'reverb', v)} displayValue={`${Math.round(layer.reverb * 100)}%`} />
         <Knob label="PHASER" value={layer.phaser} min={0} max={1} onChange={(v) => onUpdate(index, 'phaser', v)} displayValue={`${Math.round(layer.phaser * 100)}%`} />
-        <Knob label="DELAY" value={layer.delay} min={0} max={1} onChange={(v) => onUpdate(index, 'delay', v)} displayValue={`${Math.round(layer.delay * 100)}%`} />
+        <div className="knob-group">
+          <Knob label="DELAY" value={layer.delay} min={0} max={1} onChange={(v) => onUpdate(index, 'delay', v)} displayValue={`${Math.round(layer.delay * 100)}%`} />
+          <select className="delay-character" value={layer.delayCharacter} onChange={(e) => onUpdate(index, 'delayCharacter', e.target.value)}>
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
+          </select>
+        </div>
+        <Knob label="DRIVE" value={layer.distortion} min={0} max={1} onChange={(v) => onUpdate(index, 'distortion', v)} displayValue={`${Math.round(layer.distortion * 100)}%`} />
         <Knob label="TRANSPOSE" value={layer.transpose} min={-12} max={12} onChange={(v) => onUpdate(index, 'transpose', v)} displayValue={`${layer.transpose > 0 ? '+' : ''}${layer.transpose.toFixed(0)}st`} />
+        <Knob label="FILTER" value={layer.filter} min={-1} max={1} onChange={(v) => onUpdate(index, 'filter', v)} displayValue={layer.filter > -0.03 && layer.filter < 0.03 ? 'OPEN' : layer.filter < 0 ? 'HP' : 'LP'} />
       </div>
     </div>
   )
 }
 
-const defaultLayer = () => ({ recording: null, playing: false, volume: 0.8, reverb: 0, phaser: 0, delay: 0, transpose: 0 })
+const defaultLayer = () => ({ recording: null, playing: false, volume: 0.8, reverb: 0, phaser: 0, delay: 0, delayCharacter: 'medium', distortion: 0, filter: 0, transpose: 0 })
 
 export default function MixerView() {
   const [layers, setLayers] = useState(Array.from({ length: MAX_LAYERS }, defaultLayer))
@@ -186,20 +195,22 @@ export default function MixerView() {
     startedRef.current = true
   }
 
-  function getOrCreateChain(index) {
-    if (!chainsRef.current[index]) {
-      const player = new Tone.Player({ loop: true })
-      const volume = new Tone.Gain(0.8)
-      const phaser = new Tone.Phaser({ frequency: 0.5, octaves: 3, baseFrequency: 350, wet: 0 })
-      const delay = new Tone.FeedbackDelay({ delayTime: 0.25, feedback: 0.3, wet: 0 })
-      const reverb = new Tone.Reverb({ decay: 3, wet: 0 })
-      reverb.generate()
-      player.chain(volume, phaser, delay, reverb)
-      reverb.connect(masterRef.current)
-      chainsRef.current[index] = { player, volume, phaser, delay, reverb }
-    }
-    return chainsRef.current[index]
+function getOrCreateChain(index) {
+  if (!chainsRef.current[index]) {
+    const player = new Tone.Player({ loop: true })
+    const volume = new Tone.Gain(0.8)
+    const phaser = new Tone.Phaser({ frequency: 0.5, octaves: 3, baseFrequency: 350, wet: 0 })
+    const delay = new Tone.FeedbackDelay({ delayTime: 0.25, feedback: 0.35, wet: 0 })
+    const reverb = new Tone.Reverb({ decay: 3, wet: 0 })
+    reverb.generate()
+    const distortion = new Tone.Distortion({ distortion: 0.8, wet: 0 })
+    const filter = new Tone.Filter({ type: 'lowpass', frequency: 20000 })
+    player.chain(volume, phaser, delay, reverb, distortion, filter)
+    filter.connect(masterRef.current)
+    chainsRef.current[index] = { player, volume, phaser, delay, reverb, distortion, filter }
   }
+  return chainsRef.current[index]
+}
 
   async function assignRecording(index, recording) {
     await ensureStarted()
@@ -242,6 +253,21 @@ export default function MixerView() {
       chain.delay.wet.value = value
     } else if (key === 'transpose') {
       chain.player.playbackRate = Math.pow(2, value / 12)
+    } else if (key === 'distortion') {
+      chain.distortion.wet.value = value
+    } else if (key === 'filter') {
+      if (value < 0) {
+        chain.filter.type = 'highpass'
+        chain.filter.frequency.value = 20 + Math.abs(value) * 2000
+      } else {
+        chain.filter.type = 'lowpass'
+        chain.filter.frequency.value = 20000 - value * 18000
+      }
+    } else if (key === 'delayCharacter') {
+      const presets = { short: [0.08, 0.2], medium: [0.25, 0.35], long: [0.5, 0.5] }
+      const [time, fb] = presets[value]
+      chain.delay.delayTime.value = time
+      chain.delay.feedback.value = fb
     }
   }
 
@@ -285,6 +311,8 @@ export default function MixerView() {
         chain?.phaser.dispose()
         chain?.delay.dispose()
         chain?.reverb.dispose()
+        chain?.distortion.dispose()
+        chain?.filter.dispose()
       })
       masterRef.current?.dispose()
     }
@@ -293,7 +321,6 @@ export default function MixerView() {
   return (
     <div className="parasonic mixer-page">
       <div className="mixer-toolbar">
-        <h2>Radio</h2>
         <div className="mixer-toolbar-buttons">
           <button className="mixer-toolbar-btn" onClick={stopAll}>Stop all</button>
           <button className={'mixer-toolbar-btn record' + (isRecording ? ' active' : '')} onClick={toggleRecording}>

@@ -1,0 +1,16 @@
+.music-placeholder {
+  padding: 60px 20px;
+  text-align: center;
+  color: #7c8a80;
+  font-size: 14px;
+}
+.knob-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.delay-character {
+  background: #0e1210;
+  border: 1px solid #2a2f2b;
+  color: #e8e4da;
+  font-size: 9px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: inherit;
+}

@@ -32,7 +32,7 @@ const labelOffsets = {
   Heat: { dx: -70, dy: 15 },
 }
 
-const entityElements = {
+export const entityElements = {
   'Pavement': ['Ground'],
   'Ground': ['Ground'],
   'Compost': ['Ground', 'Biological'],
@@ -99,7 +99,7 @@ const entityElements = {
   'Flag pole': ['Metal'],
 }
 
-const allEntities = [...new Set(recordings.flatMap((r) => r.entities))]
+export const allEntities = [...new Set(recordings.flatMap((r) => r.entities))]
 
 const singleElementOffsets = {}
 Object.keys(elementAnchors).forEach((elName, elIndex) => {
@@ -217,7 +217,7 @@ function buildLinks() {
   return links
 }
 
-function connectedTo(entity) {
+export function connectedTo(entity) {
   const set = new Set()
   recordings.forEach((r) => {
     if (r.entities.includes(entity)) {
@@ -242,7 +242,7 @@ function matchesGeneric(r, selectedPath, searchQuery) {
   return r.entities.filter((e) => selectedPath.includes(e)).length >= 2
 }
 
-function matchesElement(r, activeElement) {
+export function matchesElement(r, activeElement) {
   return r.entities.some((e) => (entityElements[e] || []).includes(activeElement))
 }
 
