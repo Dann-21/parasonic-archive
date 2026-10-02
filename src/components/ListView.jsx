@@ -329,7 +329,10 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
       audio.pause()
       setPlayingId(null)
     } else {
-      audio.src = previewUrlFor(r)
+      const url = previewUrlFor(r)
+      if (audio.src.indexOf(url) === -1) {
+        audio.src = url
+      }
       audio.play().catch(() => {})
       setPlayingId(r.id)
     }
@@ -786,7 +789,7 @@ function RelationsGraph({ selectedPath, setSelectedPath, searchQuery, setSearchQ
     ? recordings.filter((r) => matchesGeneric(r, selectedPath, ''))
     : []
 
-  const currentTrack = recordings.find((r) => r.id === playingId)
+  const currentTrack = matchedRecordings[0]
 
   return (
     <div className="relations-layout">
