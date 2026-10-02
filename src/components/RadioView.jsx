@@ -246,8 +246,8 @@ export default function RadioView() {
           <button className={'radio-power' + (power ? ' on' : '')} onClick={togglePower}>⏻</button>
             <Fader value={volume} min={0} max={1} onChange={setVolume} />
           <button className="radio-switch" onClick={toggleMode}>
-            <span className={mode === 'entities' ? 'active' : ''}>AM</span>
-            <span className={mode === 'elements' ? 'active' : ''}>FM</span>
+            <span className={mode === 'entities' ? 'active' : ''}>NT</span>
+            <span className={mode === 'elements' ? 'active' : ''}>MT</span>
           </button>
         </div>
       </div>
